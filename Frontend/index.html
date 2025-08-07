@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Asistente Técnico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h2>Asistente Técnico</h2>
+    <input type="text" id="pregunta" placeholder="Escribe tu pregunta aquí...">
+    <button onclick="enviarPregunta()">Enviar</button>
+
+    <h3>Respuesta</h3>
+    <pre id="respuesta"></pre>
+
+    <script>
+        async function enviarPregunta() {
+            const pregunta = document.getElementById("pregunta").value;
+            const respuestaDiv = document.getElementById("respuesta");
+            respuestaDiv.textContent = "Procesando...";
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/preguntar?pregunta=${encodeURIComponent(pregunta)}`);
+                const data = await response.json();
+                if (data.respuesta) {
+                    respuestaDiv.textContent = data.respuesta;
+                } else {
+                    respuestaDiv.textContent = "Error al obtener la respuesta.";
+                }
+            } catch (err) {
+                respuestaDiv.textContent = `Error de conexión: ${err}`;
+            }
+        }
+    </script>
+</body>
+</html>
