@@ -177,3 +177,7 @@ app.get('/api/search', (req, res) => {
 app.listen(3000, () => {
     console.log('API corriendo en http://localhost:3000');
 });
+
+
+## Comando para correr el API en local
+uvicorn main:app --reload
