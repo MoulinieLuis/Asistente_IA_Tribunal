@@ -1,6 +1,8 @@
+# main.py
+
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from motor_semantico import buscar_fragmento_relacionado
+from motor_semantico import buscar_fragmentos_relacionados
 from ia_connector import preguntar_ia
 
 app = FastAPI()
@@ -15,13 +17,19 @@ app.add_middleware(
 
 @app.get("/preguntar")
 def preguntar(pregunta: str = Query(..., description="Pregunta del usuario")):
-    contexto = buscar_fragmento_relacionado(pregunta)
+    # Ahora buscamos varios fragmentos
+    contextos = buscar_fragmentos_relacionados(pregunta)
+    
+    # Unir los fragmentos en una sola cadena para el prompt
+    contexto_completo = "\n\n---\n\n".join(contextos)
 
     prompt = f"""
-    Usa el siguiente fragmento del manual para responder a la pregunta del usuario.
+    Usa los siguientes fragmentos del manual para responder a la pregunta del usuario. 
+    Combina la información de todos los fragmentos si es necesario, pero solo usa la información que se te proporciona.
+    Si la pregunta no puede ser respondida con la información de los fragmentos, di que no tienes la información necesaria.
 
-    Fragmento del manual:
-    {contexto}
+    Fragmentos del manual:
+    {contexto_completo}
 
     Pregunta del usuario:
     {pregunta}
@@ -31,15 +39,11 @@ def preguntar(pregunta: str = Query(..., description="Pregunta del usuario")):
 
     respuesta = preguntar_ia(prompt)
 
-    # Si es error, devolverlo con un status adecuado (podrías hacer try/except con HTTPException)
     if respuesta.startswith("[ERROR]"):
         return {"error": respuesta}
 
     return {
         "pregunta": pregunta,
-        "fragmento_relacionado": contexto,
+        "fragmentos_relacionados": contextos, # Devolvemos todos los fragmentos
         "respuesta": respuesta
     }
-
-
-#Final comment

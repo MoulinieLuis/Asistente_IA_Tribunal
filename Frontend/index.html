@@ -39,11 +39,16 @@
             try {
                 const response = await fetch(`http://127.0.0.1:8000/preguntar?pregunta=${encodeURIComponent(pregunta)}`);
                 const data = await response.json();
+                
+                // Check if the response contains an error or a valid answer
                 if (data.respuesta) {
                     respuestaDiv.textContent = data.respuesta;
+                } else if (data.error) {
+                    respuestaDiv.textContent = `Error del servidor: ${data.error}`;
                 } else {
-                    respuestaDiv.textContent = "Error al obtener la respuesta.";
+                    respuestaDiv.textContent = "Error: El formato de la respuesta es incorrecto.";
                 }
+
             } catch (err) {
                 respuestaDiv.textContent = `Error de conexión: ${err}`;
             }
