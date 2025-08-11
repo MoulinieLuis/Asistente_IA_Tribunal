@@ -2,9 +2,9 @@ import requests
 
 def preguntar_ia(prompt: str) -> str:
     try:
-        url = "http://localhost:11434/api/generate"  # Puerto por defecto de Ollama
+        url = "http://localhost:11434/api/generate"
         payload = {
-            "model": "mistral",  # O el modelo que descargaste
+            "model": "mistral",
             "prompt": prompt
         }
         response = requests.post(url, json=payload, stream=True)
