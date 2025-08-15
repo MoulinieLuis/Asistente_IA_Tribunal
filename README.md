@@ -118,4 +118,4 @@ Realizar cambios y pruebas.
 
 Hacer un Pull Request con una descripción clara de las modificaciones.
 
-![Arquitectura del Proyecto](img/arquitectura_proyecto_asistente.png)
+![Arquitectura del Proyecto](/Backend/img/arquitectura_proyecto_asistente.png)
