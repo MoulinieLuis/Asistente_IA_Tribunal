@@ -24,7 +24,8 @@ def preguntar(pregunta: str = Query(..., description="Pregunta del usuario")):
     contexto_completo = "\n\n---\n\n".join(contextos)
 
     prompt = f"""
-    Usa los siguientes fragmentos del manual para responder a la pregunta del usuario. 
+    Usa los siguientes fragmentos del manual para responder a la pregunta del usuario.
+    Todo texto generado como respuesta debe estar en idioma español 
     Combina la información de todos los fragmentos si es necesario, pero solo usa la información que se te proporciona.
     Si la pregunta no puede ser respondida con la información de los fragmentos, di que no tienes la información necesaria.
 
